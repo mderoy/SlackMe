@@ -12,3 +12,6 @@ If you're a part of Unity, our webhook URL can be obtained by logging into our s
 If you're not a part of unity, you can generate a webhook url following instructions on the slack website here https://api.slack.com/incoming-webhooks
 
 Currently Windows only, but should be compatible with Mac & Linux soon after a few minor changes! Stay Tuned!
+
+# Usage
+slackme.exe command
