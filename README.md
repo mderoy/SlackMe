@@ -1,7 +1,7 @@
 # SlackMe
 Why keep looking at that terminal window? Run your build, tests, or whatever through SlackMe and get notified when its done!
 
-Simply create a slackme.cfg file in you home directory (on windows C:\Users\<Username>\slackme.cfg
+Simply create a slackme.cfg file in you home directory (on windows C:\Users\<Username>\slackme.cfg)
 
 slackurl=SlackHookURL
 
