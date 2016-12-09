@@ -10,3 +10,5 @@ username=SlackUsername
 If you're a part of Unity, our webhook URL can be obtained by logging into our slack and looking at https://unity.slack.com/services/B3DGVAUCE
 
 If you're not a part of unity, you can generate a webhook url following instructions on the slack website here https://api.slack.com/incoming-webhooks
+
+Currently Windows only, but should be compatible with Mac & Linux soon after a few minor changes! Stay Tuned!
