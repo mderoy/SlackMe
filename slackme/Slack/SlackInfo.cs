@@ -8,6 +8,7 @@ namespace slackme.Slack
 	public class SlackInfo
 	{
 		private const char ConfigurationDelimiter = '=';
+		private const string ConfigurationFileName = "slackme.cfg";
 
 		public string HookUrl;
 		public string Channel;
@@ -17,8 +18,8 @@ namespace slackme.Slack
 		{
 			string username = "";
 			string hookurl = "";
-			string filename = "slackme.cfg";
-			NPath configurationFilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile).ToNPath().Combine(filename);
+			
+			NPath configurationFilePath = LocateConfigurationFilePath();
 			if (configurationFilePath.Exists())
 			{
 				foreach (string line in configurationFilePath.ReadAllLines())
@@ -60,6 +61,16 @@ namespace slackme.Slack
 				Environment.Exit(1);
 			}
 			Username = "Slack Me!";
+		}
+
+		private NPath LocateConfigurationFilePath()
+		{
+			var assemblyDirectory = typeof(SlackMe).Assembly.Location.ToNPath().Parent;
+			var possibleConfigPath = assemblyDirectory.Combine(ConfigurationFileName);
+			if (possibleConfigPath.Exists())
+				return possibleConfigPath;
+
+			return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile).ToNPath().Combine(ConfigurationFileName);
 		}
 	}
 }
