@@ -29,10 +29,20 @@ namespace slackme
 			foreach (string str in args)
 				commandPassTru += str + " ";
 
-			ProcessStartInfo startInfo = new ProcessStartInfo("cmd", "/c " + commandPassTru)
+		    //windows
+		    string terminalEmulator = "powershell.exe";
+		    string arguments = "/c " + commandPassTru;
+		    //osx, linux
+		    if (Environment.OSVersion.Platform == PlatformID.Unix)
+		    {
+		        terminalEmulator = "/bin/bash";
+		        arguments = " -c " + commandPassTru;
+		    }
+
+		    ProcessStartInfo startInfo = new ProcessStartInfo("cmd", arguments)
 			{
 				//Fixme Mac, Linux support
-				FileName = "powershell.exe",
+				FileName = terminalEmulator,
 				WindowStyle = ProcessWindowStyle.Hidden,
 				UseShellExecute = false,
 				RedirectStandardOutput = true,
@@ -40,7 +50,8 @@ namespace slackme
 				WorkingDirectory = Environment.CurrentDirectory
 			};
 
-			SlackInfo info = new SlackInfo();
+
+		    SlackInfo info = new SlackInfo();
 			SlackChannelPoster poster = new SlackChannelPoster(info);
 			SlackMessage msg = new SlackMessage();
 			Process process = Process.Start(startInfo);

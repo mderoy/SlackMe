@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using NiceIO;
 
@@ -20,6 +19,7 @@ namespace slackme.Slack
 			string hookurl = "";
 			
 			NPath configurationFilePath = LocateConfigurationFilePath();
+		    Console.WriteLine(configurationFilePath);
 			if (configurationFilePath.Exists())
 			{
 				foreach (string line in configurationFilePath.ReadAllLines())
