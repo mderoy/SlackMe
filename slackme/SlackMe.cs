@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Text;
-using System.Threading.Tasks;
 using slackme.Slack;
+using slackme.Utils;
 using Slack.Webhooks;
 
 /*
@@ -22,61 +18,29 @@ namespace slackme
 {
 	class SlackMe
 	{
-		const int NumLinesToSave = 20;
+		const int NumLinesToSave = 50;
 		static void Main(string[] args)
 		{
-			string commandPassTru = "";
-			foreach (string str in args)
-				commandPassTru += str + " ";
+			using (var runnerResult = new SlackMeRunner().Run(args))
+				PostToSlack(args.AggregateWithSpace(), runnerResult);
+		}
 
-		    //windows
-		    string terminalEmulator = "powershell.exe";
-		    string arguments = "/c " + commandPassTru;
-		    //osx, linux
-		    if (Environment.OSVersion.Platform == PlatformID.Unix)
-		    {
-		        terminalEmulator = "/bin/bash";
-		        arguments = " -c " + commandPassTru;
-		    }
-
-		    ProcessStartInfo startInfo = new ProcessStartInfo("cmd", arguments)
-			{
-				//Fixme Mac, Linux support
-				FileName = terminalEmulator,
-				WindowStyle = ProcessWindowStyle.Hidden,
-				UseShellExecute = false,
-				RedirectStandardOutput = true,
-				CreateNoWindow = false,
-				WorkingDirectory = Environment.CurrentDirectory
-			};
-
-
-		    SlackInfo info = new SlackInfo();
+		private static void PostToSlack(string command, SlackMeRunner.SlackMeRunResult result)
+		{
+			SlackInfo info = new SlackInfo();
 			SlackChannelPoster poster = new SlackChannelPoster(info);
-			SlackMessage msg = new SlackMessage();
-			Process process = Process.Start(startInfo);
-			List<string> lastLines = new List<string>();
-			process.OutputDataReceived += (sender, e) =>
-			{
-				lastLines.Add(e.Data);
-				if (lastLines.Count > NumLinesToSave)
-				{
-					lastLines.RemoveAt(0);
-				}
-				Console.WriteLine(e.Data);
-			};
-			process.BeginOutputReadLine();
-			process.WaitForExit();
-
-			String output = "Command: \"" + commandPassTru + "\" Has Finished\n";
+			var successOrFail = result.ExecuteResult.ExitCode == 0 ? "SUCCESS" : "FAIL";
+			String output = $"[{successOrFail}] Command: \"{command}\" Has Finished\n";
 
 			SlackAttachment attachment = new SlackAttachment();
 			attachment.Color = "#FF9C27";
 			attachment.Title = "Command Output (Truncated)";
 			attachment.Text = "";
-			foreach (string line in lastLines)
+			var allLines = result.AllOutputFilePath.ReadAllLines();
+			var startIndex = allLines.Length <= NumLinesToSave ? 0 : allLines.Length - NumLinesToSave;
+			for (int i = startIndex; i < allLines.Length; i++)
 			{
-				attachment.Text += line;
+			    attachment.Text += allLines[i];
 			}
 
 			List<SlackAttachment> attachments = new List<SlackAttachment>();
