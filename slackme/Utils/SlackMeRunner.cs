@@ -36,7 +36,8 @@ namespace slackme.Utils
 					return new SlackMeRunResult
 					{
 						AllOutputFilePath = allOutputFilePath,
-						ExecuteResult = executeResult
+						ExecuteResult = executeResult,
+                        ExecuteArgs = executeArgs
 					};
 				}
 			}
@@ -66,6 +67,7 @@ namespace slackme.Utils
 		{
 			public NPath AllOutputFilePath;
 			public Shell.ExecuteResult ExecuteResult;
+		    public Shell.ExecuteArgs ExecuteArgs;
 
 			public void Dispose()
 			{
