@@ -21,8 +21,13 @@ namespace slackme
 		const int NumLinesToSave = 50;
 		static void Main(string[] args)
 		{
-			using (var runnerResult = new SlackMeRunner().Run(args))
-				PostToSlack(args.AggregateWithSpace(), runnerResult);
+            ConfigFile.Load();
+
+		    using (var runnerResult = new SlackMeRunner().Run(args))
+		    {
+                OutputManager.Handle(runnerResult);
+		        PostToSlack(args.AggregateWithSpace(), runnerResult);
+		    }
 		}
 
 		private static void PostToSlack(string command, SlackMeRunner.SlackMeRunResult result)

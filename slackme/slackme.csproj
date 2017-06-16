@@ -59,7 +59,9 @@
     <Compile Include="NiceIO\NiceIO.cs" />
     <Compile Include="Slack\DefaultSlackClientWrapper.cs" />
     <Compile Include="Slack\ISlackClientWrapper.cs" />
+    <Compile Include="Utils\ConfigFile.cs" />
     <Compile Include="Utils\Helpers.cs" />
+    <Compile Include="Utils\OutputManager.cs" />
     <Compile Include="Utils\SlackMeRunner.cs" />
     <Compile Include="Utils\Shell.cs" />
     <Compile Include="SlackMe.cs" />
